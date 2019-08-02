@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 
 //Skins https://github.com/czyzby/gdx-skins
 
-public abstract class PupApplication extends ApplicationAdapter {
+public abstract class EngineApplication extends ApplicationAdapter {
 	private static String FONT_CHARACTERS = FreeTypeFontGenerator.DEFAULT_CHARS + "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ" + "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
 
 	private AssetManager manager;
@@ -43,7 +43,7 @@ public abstract class PupApplication extends ApplicationAdapter {
 	private Map<String,BitmapFont> fontsByName;
 
 
-	public PupApplication(@Nullable Map<Class<? extends Service>, Service> nativeServices) {
+	public EngineApplication(@Nullable Map<Class<? extends Service>, Service> nativeServices) {
 		super();
 		if(nativeServices != null) Services.addOrReplaceServices(nativeServices);
 	}
@@ -100,6 +100,7 @@ public abstract class PupApplication extends ApplicationAdapter {
 		fontsByName.put("huge-font", generator.generateFont(fontParameter(128)));
 		fontsByName.put("big-font", generator.generateFont(fontParameter(64)));
 		fontsByName.put("default-font", generator.generateFont(fontParameter(40)));
+		fontsByName.put("debug-font", generator.generateFont(fontParameter(40)));
 		generator.dispose();
 		return fontsByName;
 	}
