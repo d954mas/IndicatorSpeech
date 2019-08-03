@@ -64,7 +64,6 @@ public class DebugInfoStage implements Disposable {
 
             @Override
             public void onResult(String result) {
-                Gdx.app.log("RRRRR","RESULT");
                 lblSpeechResults.setText("Result:" + result);
             }
         });
