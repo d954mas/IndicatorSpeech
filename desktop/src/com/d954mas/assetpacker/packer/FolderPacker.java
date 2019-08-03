@@ -32,7 +32,11 @@ public class FolderPacker {
             if(file.isDirectory()){
 
                 if(name.endsWith("atlas")){
-                        TexturePacker.process(file.getPath(), moveToName, "atlas");
+                    TexturePacker.Settings settings = new TexturePacker.Settings();
+                    settings.maxWidth = 2048;
+                    settings.maxHeight = 2048;
+
+                    TexturePacker.process(settings,file.getPath(), moveToName, "atlas");
                 }else {
                     moveToName=ASSETS_PATH+path.substring(path.indexOf("/"),path.lastIndexOf("/"));
                     FileUtils.copyDirectory(file,new File(moveToName));

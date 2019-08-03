@@ -1,0 +1,40 @@
+
+atlas.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Sprite1
+  rotate: false
+  xy: 2, 798
+  size: 1164, 794
+  orig: 1164, 794
+  offset: 0, 0
+  index: -1
+Sprite2
+  rotate: false
+  xy: 2, 2
+  size: 1164, 794
+  orig: 1164, 794
+  offset: 0, 0
+  index: -1
+Sprite4
+  rotate: false
+  xy: 2, 2
+  size: 1164, 794
+  orig: 1164, 794
+  offset: 0, 0
+  index: -1
+
+atlas2.png
+size: 2048,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Sprite3
+  rotate: false
+  xy: 2, 2
+  size: 1164, 794
+  orig: 1164, 794
+  offset: 0, 0
+  index: -1

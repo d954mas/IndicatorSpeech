@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 public abstract class EngineApplication extends ApplicationAdapter {
 	private static String FONT_CHARACTERS = FreeTypeFontGenerator.DEFAULT_CHARS + "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ" + "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
 
-	private AssetManager manager;
+	protected AssetManager manager;
 	private PerformanceLogger performanceLogger;
 	private DebugInfoStage debugInfoStage;
 	private InputMultiplexer mainInput;
