@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
+import com.d954mas.game.indicator2019.speech.services.iface.SpeechService;
 import com.justai.aimybox.Aimybox;
 import com.justai.aimybox.api.DialogApi;
 import com.justai.aimybox.api.aimybox.AimyboxDialogApi;
@@ -24,8 +25,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.UUID;
 
 import kotlin.Unit;
@@ -49,6 +53,7 @@ public class SpeechServiceAndroid implements com.d954mas.game.indicator2019.spee
     private  ReceiveChannel<VoiceTrigger.Event> subscriptionVoiceTriggerEvents;
     private  ReceiveChannel<DialogApi.Event> subscriptionDialogsEvents;
     //endregion
+    private Set<SpeechListener> speechListeners;
 
     //region init
     public SpeechServiceAndroid(Context context){ this.context = context; }
@@ -56,6 +61,7 @@ public class SpeechServiceAndroid implements com.d954mas.game.indicator2019.spee
     @Override
     public void init() {
         Log.d(TAG,"init speech service");
+        speechListeners = new LinkedHashSet<>();
         Config config = Config.Companion.create(
                 new GooglePlatformSpeechToText(context, LOCALE, false),
                 new GooglePlatformTextToSpeech(context, LOCALE, null, 1),
@@ -118,14 +124,23 @@ public class SpeechServiceAndroid implements com.d954mas.game.indicator2019.spee
             else if (event instanceof SpeechToText.Event.RecognitionPartialResult){
                 SpeechToText.Event.RecognitionPartialResult eventCast = (SpeechToText.Event.RecognitionPartialResult) event;
                 Log.d(TAG_EVENT,"SpeechToText.Event.RecognitionPartialResult");
+                for (SpeechListener listener:speechListeners){
+                    listener.onPartialResult(eventCast.getText());
+                }
             }
             else if (event instanceof SpeechToText.Event.RecognitionResult){
                 SpeechToText.Event.RecognitionResult eventCast = (SpeechToText.Event.RecognitionResult) event;
                 Log.d(TAG_EVENT,"SpeechToText.Event.RecognitionResult");
+                for (SpeechListener listener:speechListeners){
+                    listener.onResult(eventCast.getText());
+                }
             }
             else if (event instanceof SpeechToText.Event.EmptyRecognitionResult){
                 SpeechToText.Event.EmptyRecognitionResult eventCast = (SpeechToText.Event.EmptyRecognitionResult) event;
                 Log.d(TAG_EVENT,"SpeechToText.Event.EmptyRecognitionResult");
+                for (SpeechListener listener:speechListeners){
+                    listener.onResult("");
+                }
             }
             else if (event instanceof SpeechToText.Event.RecognitionCancelled){
                 SpeechToText.Event.RecognitionCancelled eventCast = (SpeechToText.Event.RecognitionCancelled) event;
@@ -134,10 +149,16 @@ public class SpeechServiceAndroid implements com.d954mas.game.indicator2019.spee
             else if (event instanceof SpeechToText.Event.SpeechStartDetected){
                 SpeechToText.Event.SpeechStartDetected eventCast = (SpeechToText.Event.SpeechStartDetected) event;
                 Log.d(TAG_EVENT,"SpeechToText.Event.SpeechStartDetected");
+                for (SpeechListener listener:speechListeners){
+                    listener.onStart();
+                }
             }
             else if (event instanceof SpeechToText.Event.SpeechEndDetected){
                 SpeechToText.Event.SpeechEndDetected eventCast = (SpeechToText.Event.SpeechEndDetected) event;
                 Log.d(TAG_EVENT,"SpeechToText.Event.SpeechEndDetected");
+                for (SpeechListener listener:speechListeners){
+                    listener.onEnd();
+                }
             }
             else if (event instanceof SpeechToText.Event.SoundVolumeRmsChanged){
                 SpeechToText.Event.SoundVolumeRmsChanged eventCast = (SpeechToText.Event.SoundVolumeRmsChanged) event;
@@ -255,6 +276,21 @@ public class SpeechServiceAndroid implements com.d954mas.game.indicator2019.spee
 
     @Override
     public void send(Object request) { throw new java.lang.UnsupportedOperationException("Not implemented yet."); }
+
+    @Override
+    public State getState() {
+       return State.valueOf(aimybox.getState().getValue().toString());
+    }
+
+    @Override
+    public void addSpeechListener(SpeechListener speechListener) {
+        speechListeners.add(speechListener);
+    }
+
+    @Override
+    public void removeSpeechListener(SpeechListener speechListener) {
+        speechListeners.remove(speechListener);
+    }
 
     //region life cycle
     @Override

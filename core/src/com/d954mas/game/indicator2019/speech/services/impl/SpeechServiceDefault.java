@@ -92,5 +92,20 @@ public class SpeechServiceDefault implements SpeechService {
 
     }
 
+    @Override
+    public State getState() {
+        return State.LISTENING;
+    }
+
+    @Override
+    public void addSpeechListener(SpeechListener speechListener) {
+
+    }
+
+    @Override
+    public void removeSpeechListener(SpeechListener speechListener) {
+
+    }
+
 
 }

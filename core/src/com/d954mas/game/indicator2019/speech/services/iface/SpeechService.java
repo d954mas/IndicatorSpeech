@@ -119,6 +119,18 @@ public interface SpeechService extends Service {
      * */
     public void send(Object request);
 
+    public State getState();
+
+    public void addSpeechListener(SpeechListener speechListener);
+    public void removeSpeechListener(SpeechListener speechListener);
+
+
+    interface SpeechListener {
+        public void onStart();
+        public void onEnd();
+        public void onPartialResult(String result);
+        public void onResult(String result);
+    }
 
 
 }

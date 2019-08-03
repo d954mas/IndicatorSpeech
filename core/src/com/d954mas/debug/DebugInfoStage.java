@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.d954mas.engine.services.Services;
+import com.d954mas.game.indicator2019.speech.services.iface.SpeechService;
 import com.d954mas.utils.Constants;
 import com.generated.ResDebug;
 import com.generated.ResDebugA;
@@ -20,6 +22,8 @@ public class DebugInfoStage implements Disposable {
     private Label lblMemoryJava;
     private Label lblMemoryNative;
     private Label lblDrawCalls;
+    private Label lblSpeechState;
+    private Label lblSpeechResults;
     private GLProfiler profiler;
     public DebugInfoStage(){
         stage = new Stage(new FitViewport(Constants.GAME_WIDTH,Constants.GAME_HEIGHT));
@@ -32,12 +36,38 @@ public class DebugInfoStage implements Disposable {
         lblDrawCalls= new Label("DrawCalls:0", ResDebug.res.uiskin_json);
         lblDrawCalls.setPosition(1050,1080-60);
 
+        lblSpeechState= new Label("State:", ResDebug.res.uiskin_json);
+        lblSpeechState.setPosition(0,1080-60-60);
+        lblSpeechResults= new Label("Result:", ResDebug.res.uiskin_json);
+        lblSpeechResults.setPosition(420,1080-60-60);
+
         stage.addActor(lblFrames);
         stage.addActor(lblMemoryJava);
         stage.addActor(lblMemoryNative);
         stage.addActor(lblDrawCalls);
+        stage.addActor(lblSpeechState);
+        stage.addActor(lblSpeechResults);
         profiler = new GLProfiler(Gdx.graphics);
         profiler.enable();
+
+        Services.get(SpeechService.class).addSpeechListener(new SpeechService.SpeechListener() {
+            @Override
+            public void onStart() { }
+
+            @Override
+            public void onEnd() { }
+
+            @Override
+            public void onPartialResult(String result) {
+                lblSpeechResults.setText("Result(part):" + result);
+            }
+
+            @Override
+            public void onResult(String result) {
+                Gdx.app.log("RRRRR","RESULT");
+                lblSpeechResults.setText("Result:" + result);
+            }
+        });
     }
 
     private String humanReadableByteCount(long bytes) {
@@ -54,6 +84,8 @@ public class DebugInfoStage implements Disposable {
         lblMemoryJava.setText(String.format("mem(java):%s", humanReadableByteCount(Gdx.app.getJavaHeap())));
         lblMemoryNative.setText(String.format("mem(native):%s", humanReadableByteCount(Gdx.app.getNativeHeap())));
         lblDrawCalls.setText(String.format("DrawCalls:%d", profiler.getDrawCalls()));
+        lblSpeechState.setText(String.format("Speech:%s", Services.get(SpeechService.class).getState()));
+
     }
 
     public void draw() {
