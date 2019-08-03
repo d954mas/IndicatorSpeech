@@ -1,5 +1,6 @@
 package com.d954mas.engine.services.impl;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.d954mas.engine.services.iface.ScreenService;
 
@@ -53,6 +54,7 @@ public class ScreenServiceDefault implements ScreenService {
 
     @Override
     public void showNextScreen(Screen nextScreen, boolean clearStack) {
+        Gdx.app.log("ScreenService","show next screen:" + nextScreen.getClass().getSimpleName());
         Screen currentScreen = getCurrentScreen();
         if (currentScreen != null) {
             currentScreen.hide();

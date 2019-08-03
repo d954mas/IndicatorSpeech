@@ -35,7 +35,8 @@ public class MainActivity extends Activity {
     private void askPermissions(){
         Dexter.withActivity(this)
                 .withPermissions(
-                        Manifest.permission.RECORD_AUDIO)
+                        Manifest.permission.RECORD_AUDIO,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(new MultiplePermissionsListener() {
                     @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if(report.areAllPermissionsGranted()){

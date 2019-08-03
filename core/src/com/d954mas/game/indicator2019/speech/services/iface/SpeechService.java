@@ -51,8 +51,6 @@ public interface SpeechService extends Service {
 
     //endregion
 
-
-
     //region speak
     public void say(String text);
     public void say(String text,NextAction action);
@@ -94,6 +92,8 @@ public interface SpeechService extends Service {
     public void recognitionToggle();
 
     //endregion
+
+
 
 
     //Cancels any active component.

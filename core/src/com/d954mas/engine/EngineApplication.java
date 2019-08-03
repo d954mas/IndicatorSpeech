@@ -78,6 +78,7 @@ public abstract class EngineApplication extends ApplicationAdapter {
 		ResUi.res.init(manager,true);
 		createDebug();
 
+		Services.get(SpeechService.class).cancelCurrentTask();
 	}
 
 
@@ -117,10 +118,15 @@ public abstract class EngineApplication extends ApplicationAdapter {
 		Services.pause();
 	}
 
+	private boolean needStartRecognotion = true;
 	private void update(float dt){
 		Services.update(dt);
 		performanceLogger.update(dt);
 		debugInfoStage.update(dt);
+		if (needStartRecognotion){
+			needStartRecognotion = false;
+			Services.get(SpeechService.class).recognitionStart();
+		}
 	}
 
 	@Override

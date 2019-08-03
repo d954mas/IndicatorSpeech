@@ -9,13 +9,19 @@ import com.justai.aimybox.api.DialogApi;
 import com.justai.aimybox.api.aimybox.AimyboxDialogApi;
 import com.justai.aimybox.core.AimyboxException;
 import com.justai.aimybox.core.Config;
+import com.justai.aimybox.model.Request;
+import com.justai.aimybox.model.Response;
 import com.justai.aimybox.model.Speech;
 import com.justai.aimybox.model.TextSpeech;
 import com.justai.aimybox.speechkit.google.platform.GooglePlatformSpeechToText;
 import com.justai.aimybox.speechkit.google.platform.GooglePlatformTextToSpeech;
+import com.justai.aimybox.speechkit.yandex.cloud.YandexSpeechToText;
 import com.justai.aimybox.speechtotext.SpeechToText;
 import com.justai.aimybox.texttospeech.TextToSpeech;
 import com.justai.aimybox.voicetrigger.VoiceTrigger;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +29,8 @@ import java.util.Locale;
 import java.util.UUID;
 
 import kotlin.Unit;
+import kotlin.coroutines.Continuation;
+import kotlin.jvm.functions.Function1;
 import kotlinx.coroutines.channels.ReceiveChannel;
 
 @SuppressLint("MissingPermission")
@@ -48,15 +56,22 @@ public class SpeechServiceAndroid implements com.d954mas.game.indicator2019.spee
     @Override
     public void init() {
         Log.d(TAG,"init speech service");
-        Config config = Config.Companion.create(new GooglePlatformSpeechToText(context, LOCALE, true),
+        Config config = Config.Companion.create(
+                new GooglePlatformSpeechToText(context, LOCALE, false),
                 new GooglePlatformTextToSpeech(context, LOCALE, null, 1),
-                new AimyboxDialogApi("CXnuBJknIGKjXVaQkQ6MB0d5O7MUC2Hd", UNIT_ID, "https://zb02.just-ai.com/"), builder -> {
-                    return Unit.INSTANCE; //kotlin from java ugly
-                });
+                new DialogApi() {
+                    @Override
+                    public long getRequestTimeoutMs() { return 0; }
+                    @Nullable
+                    @Override
+                    public Object send(@NotNull Request request, @NotNull Continuation<? super Response> continuation) { return null; }
+                    @Override
+                    public void destroy() { }
+                }, builder -> Unit.INSTANCE);
         aimybox = new Aimybox(config);
         registerListeners();
         aimybox.stopRecognition();
-        say("Разговорный сервис успешно загружен");
+       //say("Разговорный сервис успешно загружен");
         Log.d(TAG,"init speech service completed");
     }
 
@@ -122,11 +137,11 @@ public class SpeechServiceAndroid implements com.d954mas.game.indicator2019.spee
             }
             else if (event instanceof SpeechToText.Event.SpeechEndDetected){
                 SpeechToText.Event.SpeechEndDetected eventCast = (SpeechToText.Event.SpeechEndDetected) event;
-                Log.d(TAG_EVENT,"SpeechToText.Event.SoundVolumeRmsChanged");
+                Log.d(TAG_EVENT,"SpeechToText.Event.SpeechEndDetected");
             }
             else if (event instanceof SpeechToText.Event.SoundVolumeRmsChanged){
                 SpeechToText.Event.SoundVolumeRmsChanged eventCast = (SpeechToText.Event.SoundVolumeRmsChanged) event;
-                Log.d(TAG_EVENT,"SpeechToText.Event.SoundVolumeRmsChanged");
+             //   Log.d(TAG_EVENT,"SpeechToText.Event.SoundVolumeRmsChanged");
             }
         };
     }
@@ -229,6 +244,7 @@ public class SpeechServiceAndroid implements com.d954mas.game.indicator2019.spee
 
     @Override
     public void recognitionToggle() { aimybox.toggleRecognition(); }
+
     //endregion
 
     @Override
