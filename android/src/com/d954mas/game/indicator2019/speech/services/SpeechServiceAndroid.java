@@ -1,6 +1,7 @@
 package com.d954mas.game.indicator2019.speech.services;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -14,12 +15,14 @@ import com.justai.aimybox.model.Request;
 import com.justai.aimybox.model.Response;
 import com.justai.aimybox.model.Speech;
 import com.justai.aimybox.model.TextSpeech;
-import com.justai.aimybox.speechkit.google.platform.GooglePlatformSpeechToText;
+import com.justai.aimybox.speechkit.google.fixed.GooglePlatformSpeechToText;
 import com.justai.aimybox.speechkit.google.platform.GooglePlatformTextToSpeech;
 import com.justai.aimybox.speechkit.yandex.cloud.YandexSpeechToText;
 import com.justai.aimybox.speechtotext.SpeechToText;
 import com.justai.aimybox.texttospeech.TextToSpeech;
 import com.justai.aimybox.voicetrigger.VoiceTrigger;
+import com.vikramezhil.droidspeech.DroidSpeech;
+import com.vikramezhil.droidspeech.OnDSListener;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,19 +34,25 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CancellationException;
 
 import kotlin.Unit;
 import kotlin.coroutines.Continuation;
+import kotlin.coroutines.CoroutineContext;
 import kotlin.jvm.functions.Function1;
+import kotlinx.coroutines.channels.ActorScope;
+import kotlinx.coroutines.channels.Channel;
+import kotlinx.coroutines.channels.ChannelIterator;
 import kotlinx.coroutines.channels.ReceiveChannel;
+import kotlinx.coroutines.selects.SelectClause1;
 
 @SuppressLint("MissingPermission")
-public class SpeechServiceAndroid implements com.d954mas.game.indicator2019.speech.services.iface.SpeechService {
+public class SpeechServiceAndroid implements com.d954mas.game.indicator2019.speech.services.iface.SpeechService, OnDSListener  {
     private static final String TAG = "SpeechServiceAndroid";
     private static final String TAG_EVENT = "Speech[EVENT]";
     private final String UNIT_ID = UUID.randomUUID().toString();
     private Locale LOCALE =  new Locale("ru","RU");
-    private Context context;
+    private Activity context;
     private Aimybox aimybox;
 
     //region subscriptions
@@ -56,29 +65,73 @@ public class SpeechServiceAndroid implements com.d954mas.game.indicator2019.spee
     private Set<SpeechListener> speechListeners;
 
     //region init
-    public SpeechServiceAndroid(Context context){ this.context = context; }
+    public SpeechServiceAndroid(Activity context){ this.context = context; }
 
     @Override
     public void init() {
         Log.d(TAG,"init speech service");
         speechListeners = new LinkedHashSet<>();
-        Config config = Config.Companion.create(
-                new GooglePlatformSpeechToText(context, LOCALE, false),
-                new GooglePlatformTextToSpeech(context, LOCALE, null, 1),
-                new DialogApi() {
+
+        context.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                DroidSpeech droidSpeech =  new DroidSpeech(context, null);
+                droidSpeech.setPreferredLanguage(LOCALE.getLanguage());
+                droidSpeech.setOnDroidSpeechListener(SpeechServiceAndroid.this);
+                GooglePlatformSpeechToText speechToText =  new GooglePlatformSpeechToText(context, LOCALE, false){
+                    @NotNull
                     @Override
-                    public long getRequestTimeoutMs() { return 0; }
-                    @Nullable
+                    public ReceiveChannel<Result> startRecognition() {
+                        context.runOnUiThread(() -> droidSpeech.startDroidSpeechRecognition());
+
+                        return super.startRecognition();
+                    }
+
                     @Override
-                    public Object send(@NotNull Request request, @NotNull Continuation<? super Response> continuation) { return null; }
+                    public void stopRecognition() {
+                        super.stopRecognition();
+                       // droidSpeech.closeDroidSpeechOperations();
+                    }
+
                     @Override
-                    public void destroy() { }
-                }, builder -> Unit.INSTANCE);
-        aimybox = new Aimybox(config);
-        registerListeners();
-        aimybox.stopRecognition();
-       //say("Разговорный сервис успешно загружен");
-        Log.d(TAG,"init speech service completed");
+                    public void cancelRecognition() {
+                        super.cancelRecognition();
+                     //   droidSpeech.closeDroidSpeechOperations();
+                    }
+
+                    @Override
+                    public void destroy() {
+                        super.destroy();
+                       // droidSpeech.closeDroidSpeechOperations();
+                    }
+                };
+                Config config = Config.Companion.create(
+                        speechToText,
+                        new GooglePlatformTextToSpeech(context, LOCALE, null, 1),
+                        new DialogApi() {
+                            @Override
+                            public long getRequestTimeoutMs() {
+                                return 0;
+                            }
+
+                            @Nullable
+                            @Override
+                            public Object send(@NotNull Request request, @NotNull Continuation<? super Response> continuation) {
+                                return null;
+                            }
+
+                            @Override
+                            public void destroy() {
+                            }
+                        }, builder -> Unit.INSTANCE);
+                aimybox = new Aimybox(config);
+                registerListeners();
+                aimybox.stopRecognition();
+                //say("Разговорный сервис успешно загружен");
+                Log.d(TAG,"init speech service completed");
+            }
+        });
+
     }
 
     private void registerListeners(){
@@ -302,4 +355,42 @@ public class SpeechServiceAndroid implements com.d954mas.game.indicator2019.spee
     @Override
     public void resume() {}
     //endregion
+
+    //region continuous recognition
+    @Override
+    public void onDroidSpeechSupportedLanguages(String currentSpeechLanguage, List<String> supportedSpeechLanguages) {
+
+    }
+
+    @Override
+    public void onDroidSpeechRmsChanged(float rmsChangedValue) {
+
+    }
+
+    @Override
+    public void onDroidSpeechLiveResult(String liveSpeechResult) {
+        Log.d(TAG,"Live result" + liveSpeechResult);
+        for (SpeechListener listener:speechListeners){
+            listener.onPartialResult(liveSpeechResult);
+        }
+    }
+
+    @Override
+    public void onDroidSpeechFinalResult(String finalSpeechResult) {
+        Log.d(TAG,"Final result" + finalSpeechResult);
+        for (SpeechListener listener:speechListeners){
+            listener.onResult(finalSpeechResult);
+        }
+    }
+
+    @Override
+    public void onDroidSpeechClosedByUser() {
+
+    }
+
+    @Override
+    public void onDroidSpeechError(String errorMsg) {
+
+    }
+
 }
