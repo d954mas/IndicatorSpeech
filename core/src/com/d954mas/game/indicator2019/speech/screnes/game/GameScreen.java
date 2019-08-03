@@ -1,21 +1,16 @@
-package com.d954mas.game.indicator2019.speech.screnes;
+package com.d954mas.game.indicator2019.speech.screnes.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.profiling.GLProfiler;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.d954mas.engine.services.Services;
-import com.d954mas.engine.services.iface.ScreenService;
 import com.d954mas.game.indicator2019.speech.Game;
 import com.d954mas.game.indicator2019.speech.services.iface.SpeechService;
 import com.d954mas.utils.Constants;

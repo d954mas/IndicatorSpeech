@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.d954mas.engine.services.Services;
+import com.d954mas.game.indicator2019.speech.model.MagicWord;
+import com.d954mas.game.indicator2019.speech.model.MagicWords;
 import com.d954mas.game.indicator2019.speech.services.iface.SpeechService;
 import com.d954mas.utils.Constants;
 import com.generated.ResDebug;
@@ -24,6 +26,8 @@ public class DebugInfoStage implements Disposable {
     private Label lblDrawCalls;
     private Label lblSpeechState;
     private Label lblSpeechResults;
+    private Label lblSpeechNormalResults;
+    private Label lblSpeechMagicResults;
     private GLProfiler profiler;
     public DebugInfoStage(){
         stage = new Stage(new FitViewport(Constants.GAME_WIDTH,Constants.GAME_HEIGHT));
@@ -41,12 +45,20 @@ public class DebugInfoStage implements Disposable {
         lblSpeechResults= new Label("Result:", ResDebug.res.uiskin_json);
         lblSpeechResults.setPosition(420,1080-60-60);
 
+        lblSpeechNormalResults= new Label("Normal:", ResDebug.res.uiskin_json);
+        lblSpeechNormalResults.setPosition(420,1080-60-60-60);
+
+        lblSpeechMagicResults= new Label("Magic", ResDebug.res.uiskin_json);
+        lblSpeechMagicResults.setPosition(420,1080-60-60-60-60);
+
         stage.addActor(lblFrames);
         stage.addActor(lblMemoryJava);
         stage.addActor(lblMemoryNative);
         stage.addActor(lblDrawCalls);
         stage.addActor(lblSpeechState);
         stage.addActor(lblSpeechResults);
+        stage.addActor(lblSpeechNormalResults);
+        stage.addActor(lblSpeechMagicResults);
         profiler = new GLProfiler(Gdx.graphics);
         profiler.enable();
 
@@ -60,11 +72,24 @@ public class DebugInfoStage implements Disposable {
             @Override
             public void onPartialResult(String result) {
                 lblSpeechResults.setText("Result(part):" + result);
+                lblSpeechNormalResults.setText("Normal(part):" + String.join(" ", MagicWords.recognizeNormal(result)));
+                String magicString = "";
+                for(MagicWord magicWord:MagicWords.recognize(result)){
+                    magicString += "{" +magicWord.mainWord +"}";
+                }
+                lblSpeechMagicResults.setText("Magic(part):" + magicString);
+
             }
 
             @Override
             public void onResult(String result) {
                 lblSpeechResults.setText("Result:" + result);
+                lblSpeechNormalResults.setText("Normal:" + String.join(" ", MagicWords.recognizeNormal(result)));
+                String magicString = "";
+                for(MagicWord magicWord:MagicWords.recognize(result)){
+                    magicString += "{" +magicWord.mainWord +"}";
+                }
+                lblSpeechMagicResults.setText("Magic:" + magicString);
             }
         });
     }

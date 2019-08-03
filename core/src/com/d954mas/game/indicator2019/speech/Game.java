@@ -5,7 +5,9 @@ import com.d954mas.engine.EngineApplication;
 import com.d954mas.engine.services.Service;
 import com.d954mas.engine.services.Services;
 import com.d954mas.engine.services.iface.ScreenService;
-import com.d954mas.game.indicator2019.speech.screnes.GameScreen;
+import com.d954mas.game.indicator2019.speech.model.MagicWords;
+import com.d954mas.game.indicator2019.speech.model.World;
+import com.d954mas.game.indicator2019.speech.screnes.game.GameScreen;
 import com.generated.ResGame;
 
 import java.util.Map;
@@ -25,11 +27,15 @@ public class Game extends EngineApplication {
         ResGame.res.init(manager,true);
         Services.get(ScreenService.class)
                 .showNextScreen(new GameScreen());
+        World.init();
+        MagicWords.init();
     }
 
     @Override
     public void dispose(){
         super.dispose();
         ResGame.res.dispose(manager);
+        World.dispose();
+        MagicWords.dispose();
     }
 }

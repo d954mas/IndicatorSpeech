@@ -1,4 +1,4 @@
-package com.d954mas.game.indicator2019.speech.screnes;
+package com.d954mas.game.indicator2019.speech.screnes.game;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
