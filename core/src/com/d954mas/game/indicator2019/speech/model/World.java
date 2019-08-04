@@ -92,6 +92,8 @@ public class World {
         currentEnemyIdx = currentEnemyIdx + 1;
         currentEnemyIdx = Math.max(0, Math.min(Enemies.enemyList.size()-1, currentEnemyIdx));
         currentEnemy = Enemies.enemyList.get(currentEnemyIdx);
+        Sounds.spawns[currentEnemyIdx].play();
+        //TODO: timer 2s
     }
 
     public void prevEnemyDebug(){
@@ -111,6 +113,8 @@ public class World {
         if(effects.contains(Effects.LoveAttackEffect)){
             //reduce enemy defence
         }
+        Sounds.attackeds[currentEnemyIdx].play();
+        //TODO: timer 0.5s
         currentEnemy.hp = Math.max(currentEnemy.hp - damage,0);
         if(effects.contains(Effects.LoveAttackEffect)){
             //add hp
@@ -127,6 +131,8 @@ public class World {
             //reduce attack
             damage = Math.max(0,damage-4);
         }
+        Sounds.attacks[currentEnemyIdx].play();
+        //TODO: timer 1s
         heroHp = Math.max(0,heroHp-damage);
     }
 
