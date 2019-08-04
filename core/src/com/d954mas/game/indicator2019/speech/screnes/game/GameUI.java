@@ -18,12 +18,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.Timer;
 import com.d954mas.engine.services.Services;
 import com.d954mas.game.indicator2019.speech.model.MagicWord;
 import com.d954mas.game.indicator2019.speech.model.World;
+import com.d954mas.game.indicator2019.speech.model.effects.Effect;
 import com.d954mas.game.indicator2019.speech.services.iface.SpeechService;
 import com.d954mas.game.indicator2019.speech.services.impl.SpeechServiceDefault;
 import com.d954mas.utils.Constants;
@@ -50,6 +52,7 @@ public class GameUI {
     private Actor enemyIntentDefence;
     private Actor enemyIntentAttack;
     private Label enemyIntentText;
+    private Label effectsLbl;
 
     public GameUI(Stage stage){
         debugWords = new ArrayList<>();
@@ -136,6 +139,10 @@ public class GameUI {
         group.addActor(enemyIntentText);
 
         root.addActor(group);
+
+        effectsLbl = new Label("Effects:",ResDebug.res.uiskin_json);
+        root.addActor(effectsLbl);
+
 
 
         Actor debugScene = new Image(ResUi.res.atlas_atlas.ui);
@@ -239,6 +246,18 @@ public class GameUI {
             enemyIntentAttack.setVisible(false);
             enemyIntentText.setText(World.get().currentEnemy.defenceValue);
         }
+
+
+        String stringEffectsAttack = "";
+        String stringEffectsDefence = "";
+        for(Effect effect:World.get().effects){
+            stringEffectsAttack += effect.toString() + "\n";
+        }
+        effectsLbl.setPosition(1400,800);
+        effectsLbl.setAlignment(Align.top);
+        effectsLbl.setText("Эффекты:\n" +stringEffectsAttack);
+
+        root.addActor(effectsLbl);
     }
 
     public void updateWords(){

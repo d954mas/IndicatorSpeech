@@ -58,15 +58,15 @@ public class DebugInfoStage implements Disposable {
         lblEffects= new Label("Effects", ResDebug.res.uiskin_json);
         lblEffects.setPosition(500,1080-60-60-60-60-60-60);
 
-        stage.addActor(lblFrames);
-        stage.addActor(lblMemoryJava);
-        stage.addActor(lblMemoryNative);
-        stage.addActor(lblDrawCalls);
-        stage.addActor(lblSpeechState);
-        stage.addActor(lblSpeechResults);
-        stage.addActor(lblSpeechNormalResults);
-        stage.addActor(lblSpeechMagicResults);
-        stage.addActor(lblEffects);
+    ////  stage.addActor(lblFrames);
+      //  stage.addActor(lblMemoryJava);
+      //  stage.addActor(lblMemoryNative);
+      //  stage.addActor(lblDrawCalls);
+     //   stage.addActor(lblSpeechState);
+  //      stage.addActor(lblSpeechResults);
+   //    stage.addActor(lblSpeechNormalResults);
+  //      stage.addActor(lblSpeechMagicResults);
+   //     stage.addActor(lblEffects);
         profiler = new GLProfiler(Gdx.graphics);
         profiler.enable();
 

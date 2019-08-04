@@ -4,7 +4,7 @@ package com.d954mas.game.indicator2019.speech.model.effects;
 public class DebuffEffect extends Effect {
 
 
-    public DebuffEffect(int turns, String tag) {
-        super(turns, tag);
+    public DebuffEffect(int turns, String tag,String description) {
+        super(turns, tag,description);
     }
 }
