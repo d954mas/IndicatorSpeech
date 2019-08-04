@@ -204,7 +204,7 @@ public class World {
                     removeDebuffEffects();
                     boolean enemyAttack = true;
                     if(effects.contains(Effects.IceAttackEffect) || effects.contains(Effects.IceDefenceEffect)){
-                        //pass
+
                     }else {
                         if (enemyAttack) {
                             attackHero(5);
@@ -214,6 +214,7 @@ public class World {
                             attackEnemy(3);
                         }
                     }
+                    currentEnemy.nextTurn();
                     state = States.PLAYER_TURN;
                 }
             }, 3f);

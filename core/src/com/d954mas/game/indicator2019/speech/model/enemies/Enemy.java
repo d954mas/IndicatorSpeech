@@ -9,6 +9,9 @@ public class Enemy {
     public int hp;
     public final int minAtk, maxAtk;
     public final int minShield, maxShield;
+    public boolean attack;
+    public int attackValue;
+    public int defenceValue;
     public Enemy(Animation<TextureRegion> animation,int hp, int minAtk, int maxAtk,
                  int minShield, int maxShield){
         this.animation = animation;
@@ -18,10 +21,28 @@ public class Enemy {
         this.maxAtk = maxAtk;
         this.minShield = minShield;
         this.maxShield = maxShield;
+        nextTurn();
     }
 
-    public void reset(){
+    private int randomFromTo(int from, int to){
+        double randomDouble = Math.random();
+        randomDouble = randomDouble * to + from;
+        return  (int) randomDouble;
+    }
 
+    public void nextTurn(){
+        attack = Math.random()>0.5;
+        if(attack){
+            attackValue = randomFromTo(minAtk,maxAtk);
+        }else{
+            defenceValue = randomFromTo(minShield,maxShield);
+        }
+    }
+
+
+
+    public void reset(){
+        nextTurn();
     }
 
 
