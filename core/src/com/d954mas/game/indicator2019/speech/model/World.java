@@ -8,9 +8,12 @@ import com.d954mas.game.indicator2019.speech.model.effects.BuffEffect;
 import com.d954mas.game.indicator2019.speech.model.effects.DebuffEffect;
 import com.d954mas.game.indicator2019.speech.model.effects.Effect;
 import com.d954mas.game.indicator2019.speech.model.effects.Effects;
+import com.d954mas.game.indicator2019.speech.model.enemies.BatEnemy;
 import com.d954mas.game.indicator2019.speech.model.enemies.Enemies;
 import com.d954mas.game.indicator2019.speech.model.enemies.Enemy;
 import com.d954mas.game.indicator2019.speech.services.iface.SpeechService;
+import com.d954mas.game.indicator2019.speech.sounds.Sounds;
+import com.sun.xml.internal.bind.v2.TODO;
 
 import org.apache.lucene.morphology.LuceneMorphology;
 import org.apache.lucene.morphology.russian.RussianLuceneMorphology;
@@ -110,6 +113,8 @@ public class World {
             //add hp
         }
         if(currentEnemy.hp<=0){
+            Sounds.deaths[currentEnemyIdx].play();
+            //TODO: timer 2s
             nextEnemyDebug();
         }
     }
