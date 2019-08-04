@@ -10,6 +10,7 @@ public class ResGame {
     private boolean isLoad;
     private boolean isInit;
     public ResBat_atlas bat_atlas=new ResBat_atlas();
+    public ResEffect_atlas effect_atlas=new ResEffect_atlas();
     public ResLocation_atlas location_atlas=new ResLocation_atlas();
     public ResReg_ghost_atlas reg_ghost_atlas=new ResReg_ghost_atlas();
     public ResSlug_atlas slug_atlas=new ResSlug_atlas();
@@ -22,6 +23,7 @@ public class ResGame {
     public void init(AssetManager manager,boolean finishLoading){
         if(isInit)return;
             bat_atlas.init(manager);
+            effect_atlas.init(manager);
             location_atlas.init(manager);
             reg_ghost_atlas.init(manager);
             slug_atlas.init(manager);
@@ -36,6 +38,7 @@ public class ResGame {
     public void onLoadDone(AssetManager manager){
         if(isLoad)return;
         bat_atlas.onLoadDone(manager);
+        effect_atlas.onLoadDone(manager);
         location_atlas.onLoadDone(manager);
         reg_ghost_atlas.onLoadDone(manager);
         slug_atlas.onLoadDone(manager);
@@ -47,6 +50,7 @@ public class ResGame {
     public void dispose(AssetManager manager){
         if(isInit){
             bat_atlas.dispose(manager);
+            effect_atlas.dispose(manager);
             location_atlas.dispose(manager);
             reg_ghost_atlas.dispose(manager);
             slug_atlas.dispose(manager);
@@ -100,6 +104,46 @@ public class ResGame {
             if(isLoad){
                 atlas.dispose();
                 sprite1 = null;
+            }
+            isInit=false;
+            isLoad=false;
+        }
+    }
+    public static class ResEffect_atlas {
+        private boolean isLoad;
+        private boolean isInit;
+        public UnloadableTextureAtlas atlas;
+        public AtlasRegion attack_effect;
+        public AtlasRegion vinetka_player_uron;
+
+        protected void init(AssetManager manager){
+            init(manager,false);
+        }
+        protected void init(AssetManager manager,boolean finishLoading){
+            if(isInit)return;
+            manager.load("game/effect_atlas/atlas.atlas", TextureAtlasData.class);
+            if(finishLoading){
+                manager.finishLoading();
+                onLoadDone(manager);
+            }
+            isInit=true;
+        }
+        protected void onLoadDone(AssetManager manager){
+            if(isLoad)return;
+            if(atlas==null){
+                atlas=new UnloadableTextureAtlas();
+            }
+            atlas.load((TextureAtlasData)manager.get("game/effect_atlas/atlas.atlas"));
+            attack_effect = atlas.findRegion("attack_effect");
+            vinetka_player_uron = atlas.findRegion("vinetka_player_uron");
+            isLoad=true;
+        }
+        protected void dispose(AssetManager manager){
+            if(isInit){
+                manager.unload("game/effect_atlas/atlas.atlas");
+            }
+            if(isLoad){
+                atlas.dispose();
             }
             isInit=false;
             isLoad=false;

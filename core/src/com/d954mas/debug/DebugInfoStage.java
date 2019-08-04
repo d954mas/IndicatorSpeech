@@ -50,10 +50,10 @@ public class DebugInfoStage implements Disposable {
         lblSpeechResults.setPosition(300+420,1080-60-60);
 
         lblSpeechNormalResults= new Label("Normal:", ResDebug.res.uiskin_json);
-        lblSpeechNormalResults.setPosition(300+420,1080-60-60-60);
+        lblSpeechNormalResults.setPosition(300+420,1080-60-60);
 
         lblSpeechMagicResults= new Label("Magic", ResDebug.res.uiskin_json);
-        lblSpeechMagicResults.setPosition(300+420,1080-60-60-60-60);
+        lblSpeechMagicResults.setPosition(300+420,1080-60-60-60);
 
         lblEffects= new Label("Effects", ResDebug.res.uiskin_json);
         lblEffects.setPosition(500,1080-60-60-60-60-60-60);
@@ -64,8 +64,8 @@ public class DebugInfoStage implements Disposable {
       //  stage.addActor(lblDrawCalls);
      //   stage.addActor(lblSpeechState);
   //      stage.addActor(lblSpeechResults);
-   //    stage.addActor(lblSpeechNormalResults);
-  //      stage.addActor(lblSpeechMagicResults);
+        stage.addActor(lblSpeechNormalResults);
+        stage.addActor(lblSpeechMagicResults);
    //     stage.addActor(lblEffects);
         profiler = new GLProfiler(Gdx.graphics);
         profiler.enable();

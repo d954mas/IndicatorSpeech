@@ -150,6 +150,8 @@ public class GameUI {
        // root.addActor(debugScene);
 
         updateWords();
+
+        World.get().stage = stage;
     }
 
     private void playWordsDebug(){
