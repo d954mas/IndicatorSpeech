@@ -43,8 +43,10 @@ public class World {
     public final List<Effect> effects;
     public Enemy currentEnemy;
     public int currentEnemyIdx;
+    public int heroHp;
+    public int heroMaxHp;
+    public int heroDefence;
     enum  States {PLAYER_TURN,ENEMY_TURN};
-
     public States state;
 
     private World() {
@@ -66,6 +68,9 @@ public class World {
     }
 
     public void prepareBattle(){
+        heroMaxHp = 40;
+        heroHp = heroMaxHp;
+        heroDefence = 0;
         handsWords.clear();
         removedWords.clear();
         handsWords.addAll(allWords);
@@ -82,7 +87,7 @@ public class World {
     }
 
     public void prevEnemyDebug(){
-        currentEnemyIdx = currentEnemyIdx -1;
+        currentEnemyIdx = currentEnemyIdx - 1;
         currentEnemyIdx = Math.max(0, Math.min(Enemies.enemyList.size(), currentEnemyIdx));
         currentEnemy = Enemies.enemyList.get(currentEnemyIdx);
     }
@@ -107,8 +112,16 @@ public class World {
         }
     }
 
-    private void defenceHero(int defence){
+    private void attackHero(int damage){
+        if(effects.contains(Effects.LieDefenceEffect)){
+            //reduce attack
+            damage = Math.max(0,damage-4);
+        }
+        heroHp = Math.max(0,heroHp=damage);
+    }
 
+    private void defenceHero(int defence){
+        heroDefence = heroDefence + defence;
     }
 
     private void addEffect(Effect effect){
@@ -190,17 +203,17 @@ public class World {
                 public void run() {
                     removeDebuffEffects();
                     boolean enemyAttack = true;
-                    if(effects.contains(Effects.FireAttackEffect)){ attackEnemy(3); }
-                    if(enemyAttack && effects.contains(Effects.FireDefenceEffect)){ attackEnemy(4); }
                     if(effects.contains(Effects.IceAttackEffect) || effects.contains(Effects.IceDefenceEffect)){
                         //pass
-                    }else{
+                    }else {
+                        if (enemyAttack) {
+                            attackHero(5);
+                        }
 
+                        if (effects.contains(Effects.FireAttackEffect)) {
+                            attackEnemy(3);
+                        }
                     }
-                    if(enemyAttack && effects.contains(Effects.LieDefenceEffect)){
-                        //reduce attack
-                    }
-
                     state = States.PLAYER_TURN;
                 }
             }, 3f);
