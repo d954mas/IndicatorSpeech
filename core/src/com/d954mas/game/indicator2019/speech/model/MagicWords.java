@@ -3,6 +3,7 @@ package com.d954mas.game.indicator2019.speech.model;
 import com.d954mas.engine.utils.Cs;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -83,6 +84,20 @@ public class MagicWords {
                 magicWords.add(magicWord);
             }
         }
+
+        List<MagicWord> availableWords = new ArrayList<>(World.get().handsWords);
+
+        Iterator<MagicWord> iter = magicWords.iterator();
+        while (iter.hasNext()){
+            MagicWord magicWord = iter.next();
+            if(availableWords.contains(magicWord)){
+                availableWords.remove(magicWord);
+            }else{
+                iter.remove();
+            }
+        }
+
+
         return magicWords;
     }
 }
