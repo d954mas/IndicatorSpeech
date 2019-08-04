@@ -14,6 +14,7 @@ import com.d954mas.engine.services.Services;
 import com.d954mas.game.indicator2019.speech.model.MagicWord;
 import com.d954mas.game.indicator2019.speech.model.MagicWords;
 import com.d954mas.game.indicator2019.speech.model.World;
+import com.d954mas.game.indicator2019.speech.model.effects.Effect;
 import com.d954mas.game.indicator2019.speech.services.iface.SpeechService;
 import com.d954mas.utils.Constants;
 import com.generated.ResDebug;
@@ -30,6 +31,7 @@ public class DebugInfoStage implements Disposable {
     private Label lblSpeechNormalResults;
     private Label lblSpeechMagicResults;
     private Label lblHp;
+    private Label lblEffects;
     private GLProfiler profiler;
     public DebugInfoStage(){
         stage = new Stage(new FitViewport(Constants.GAME_WIDTH,Constants.GAME_HEIGHT));
@@ -55,6 +57,8 @@ public class DebugInfoStage implements Disposable {
 
         lblHp= new Label("HP", ResDebug.res.uiskin_json);
         lblHp.setPosition(420,1080-60-60-60-60-60);
+        lblEffects= new Label("Effects", ResDebug.res.uiskin_json);
+        lblEffects.setPosition(420,1080-60-60-60-60-60-60);
 
         stage.addActor(lblFrames);
         stage.addActor(lblMemoryJava);
@@ -65,6 +69,7 @@ public class DebugInfoStage implements Disposable {
         stage.addActor(lblSpeechNormalResults);
         stage.addActor(lblSpeechMagicResults);
         stage.addActor(lblHp);
+        stage.addActor(lblEffects);
         profiler = new GLProfiler(Gdx.graphics);
         profiler.enable();
 
@@ -116,6 +121,11 @@ public class DebugInfoStage implements Disposable {
         lblDrawCalls.setText(String.format("DrawCalls:%d", profiler.getDrawCalls()));
         lblSpeechState.setText(String.format("Speech:%s", Services.get(SpeechService.class).getState()));
         lblHp.setText("HP:" + World.get().currentEnemy.hp + "/" + World.get().currentEnemy.maxHp);
+        String stringEffects = "";
+        for(Effect effect:World.get().effects){
+            stringEffects += effect.toString() + " ";
+        }
+        lblEffects.setText("EFFECTS:" +stringEffects);
     }
 
     public void draw() {
