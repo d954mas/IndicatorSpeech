@@ -47,6 +47,9 @@ public class GameUI {
     private Label enemyDefence;
     private Label heroHp;
     private Label heroDefence;
+    private Actor enemyIntentDefence;
+    private Actor enemyIntentAttack;
+    private Label enemyIntentText;
 
     public GameUI(Stage stage){
         debugWords = new ArrayList<>();
@@ -84,7 +87,7 @@ public class GameUI {
         enemyData.add(enemyDefence).expandX();
         enemyData.setPosition(0,80);
 
-        bgEnemyGroup.addActor(bgEnemy);
+        //bgEnemyGroup.addActor(bgEnemy);
         bgEnemyGroup.addActor(enemyData);
 
 
@@ -94,13 +97,16 @@ public class GameUI {
         ResUi.res.atlas_atlas.plashka_hp_def_player.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         heroHp = new Label("HP:", ResDebug.res.uiskin_json,"big");
         heroDefence = new Label("Def:", ResDebug.res.uiskin_json,"big");
+        Label lbl = new Label("Hero:", ResDebug.res.uiskin_json,"big");
+
 
         Table heroData = new Table();
         heroData.setSize(bgHeroHp.getWidth(),bgHeroHp.getHeight());
+        heroData.add(lbl).colspan(2).row();
         heroData.add(heroHp).expandX();
         heroData.add(heroDefence).expandX();
-        heroData.setPosition(0,80);
-        bgHeroHpGroup.addActor(bgHeroHp);
+        heroData.setPosition(0,1080-300);
+       // bgHeroHpGroup.addActor(bgHeroHp);
         bgHeroHpGroup.addActor(heroData);
 
         Group bgHeroManaGroup = new Group();
@@ -109,13 +115,28 @@ public class GameUI {
         ResUi.res.atlas_atlas.plashka_mp.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         Label mpText = new Label("MP", ResDebug.res.uiskin_json);
         mpText.setPosition(bgHeroMana.getWidth()/2-mpText.getWidth()/2,80);
-        bgHeroManaGroup.addActor(bgHeroMana);
-        bgHeroManaGroup.addActor(mpText);
+        //bgHeroManaGroup.addActor(bgHeroMana);
+       // bgHeroManaGroup.addActor(mpText);
 
         root.addActor(bgEnemyGroup);
         root.addActor(bgHeroHpGroup);
         root.addActor(bgHeroManaGroup);
         root.addActor(listWordBg);
+
+        Group group = new Group();
+        enemyIntentAttack = new Image(ResUi.res.atlas_atlas.monster_attack_icon);
+        enemyIntentAttack.setScale(2);
+        enemyIntentDefence = new Image(ResUi.res.atlas_atlas.monster_def_icon);
+        enemyIntentDefence.setScale(2);
+        enemyIntentText = new Label("12",ResDebug.res.uiskin_json,"big");
+        enemyIntentText.setPosition(-30,55);
+        group.setPosition(Constants.GAME_WIDTH/2-enemyIntentAttack.getWidth()/2,800);
+        group.addActor(enemyIntentAttack);
+        group.addActor(enemyIntentDefence);
+        group.addActor(enemyIntentText);
+
+        root.addActor(group);
+
 
         Actor debugScene = new Image(ResUi.res.atlas_atlas.ui);
         debugScene.getColor().a = 0.44f;
@@ -209,6 +230,15 @@ public class GameUI {
         enemyHp.setText("Hp:" + World.get().currentEnemy.hp);
         heroHp.setText("Hp:" + World.get().heroHp);
         heroDefence.setText("Def:" + World.get().heroDefence);
+        if(World.get().currentEnemy.attack){
+            enemyIntentText.setText(World.get().currentEnemy.attackValue);
+            enemyIntentDefence.setVisible(false);
+            enemyIntentAttack.setVisible(true);
+        }else{
+            enemyIntentDefence.setVisible(true);
+            enemyIntentAttack.setVisible(false);
+            enemyIntentText.setText(World.get().currentEnemy.defenceValue);
+        }
     }
 
     public void updateWords(){
@@ -229,9 +259,9 @@ public class GameUI {
             });
             lbl.setUserObject(word);
             labels.add(lbl);
-            wordsTable.add(lbl).space(42).row();
+            wordsTable.add(lbl).space(43).row();
         }
-        wordsTable.setPosition(260,1080-wordsTable.getPrefHeight());
+        wordsTable.setPosition(260,1080-wordsTable.getPrefHeight()+145);
     }
 
     private void playWordDebug(MagicWord word){

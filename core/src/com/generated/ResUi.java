@@ -48,6 +48,8 @@ public class ResUi {
         public UnloadableTextureAtlas atlas;
         public AtlasRegion activnoe_slovo;
         public AtlasRegion empty;
+        public AtlasRegion monster_attack_icon;
+        public AtlasRegion monster_def_icon;
         public AtlasRegion mosnster_def;
         public AtlasRegion mosnster_hp_def;
         public AtlasRegion plashka_hp_def_player;
@@ -77,6 +79,8 @@ public class ResUi {
             atlas.load((TextureAtlasData)manager.get("ui/atlas_atlas/atlas.atlas"));
             activnoe_slovo = atlas.findRegion("activnoe_slovo");
             empty = atlas.findRegion("empty");
+            monster_attack_icon = atlas.findRegion("monster_attack_icon");
+            monster_def_icon = atlas.findRegion("monster_def_icon");
             mosnster_def = atlas.findRegion("mosnster_def");
             mosnster_hp_def = atlas.findRegion("mosnster_hp_def");
             plashka_hp_def_player = atlas.findRegion("plashka_hp_def_player");
