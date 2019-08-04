@@ -46,8 +46,16 @@ public class ResUi {
         private boolean isLoad;
         private boolean isInit;
         public UnloadableTextureAtlas atlas;
+        public AtlasRegion activnoe_slovo;
         public AtlasRegion empty;
+        public AtlasRegion mosnster_def;
+        public AtlasRegion mosnster_hp_def;
+        public AtlasRegion plashka_hp_def_player;
+        public AtlasRegion plashka_mp;
+        public AtlasRegion ui;
         public AtlasRegion white;
+        public AtlasRegion word_null;
+        public AtlasRegion plashka_spisok;
 
         protected void init(AssetManager manager){
             init(manager,false);
@@ -67,8 +75,16 @@ public class ResUi {
                 atlas=new UnloadableTextureAtlas();
             }
             atlas.load((TextureAtlasData)manager.get("ui/atlas_atlas/atlas.atlas"));
+            activnoe_slovo = atlas.findRegion("activnoe_slovo");
             empty = atlas.findRegion("empty");
+            mosnster_def = atlas.findRegion("mosnster_def");
+            mosnster_hp_def = atlas.findRegion("mosnster_hp_def");
+            plashka_hp_def_player = atlas.findRegion("plashka_hp_def_player");
+            plashka_mp = atlas.findRegion("plashka_mp");
+            ui = atlas.findRegion("ui");
             white = atlas.findRegion("white");
+            word_null = atlas.findRegion("word_null");
+            plashka_spisok = atlas.findRegion("plashka_spisok");
             isLoad=true;
         }
         protected void dispose(AssetManager manager){

@@ -108,6 +108,7 @@ public class GameScreen implements Screen {
         stage.act(delta);
         gameSceneEnemy.update(delta);
         gameSceneEnemy.update(delta);
+        gameUI.update(delta);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
