@@ -8,9 +8,12 @@ import com.d954mas.game.indicator2019.speech.model.effects.BuffEffect;
 import com.d954mas.game.indicator2019.speech.model.effects.DebuffEffect;
 import com.d954mas.game.indicator2019.speech.model.effects.Effect;
 import com.d954mas.game.indicator2019.speech.model.effects.Effects;
+import com.d954mas.game.indicator2019.speech.model.enemies.BatEnemy;
 import com.d954mas.game.indicator2019.speech.model.enemies.Enemies;
 import com.d954mas.game.indicator2019.speech.model.enemies.Enemy;
 import com.d954mas.game.indicator2019.speech.services.iface.SpeechService;
+import com.d954mas.game.indicator2019.speech.sounds.Sounds;
+import com.sun.xml.internal.bind.v2.TODO;
 
 import org.apache.lucene.morphology.LuceneMorphology;
 import org.apache.lucene.morphology.russian.RussianLuceneMorphology;
@@ -89,6 +92,8 @@ public class World {
         currentEnemyIdx = currentEnemyIdx + 1;
         currentEnemyIdx = Math.max(0, Math.min(Enemies.enemyList.size()-1, currentEnemyIdx));
         currentEnemy = Enemies.enemyList.get(currentEnemyIdx);
+        Sounds.spawns[currentEnemyIdx].play();
+        //TODO: timer 2s
     }
 
     public void prevEnemyDebug(){
@@ -108,11 +113,15 @@ public class World {
         if(effects.contains(Effects.LoveAttackEffect)){
             //reduce enemy defence
         }
+        Sounds.attackeds[currentEnemyIdx].play();
+        //TODO: timer 0.5s
         currentEnemy.hp = Math.max(currentEnemy.hp - damage,0);
         if(effects.contains(Effects.LoveAttackEffect)){
             //add hp
         }
         if(currentEnemy.hp<=0){
+            Sounds.deaths[currentEnemyIdx].play();
+            //TODO: timer 2s
             nextEnemyDebug();
         }
     }
@@ -122,6 +131,8 @@ public class World {
             //reduce attack
             damage = Math.max(0,damage-4);
         }
+        Sounds.attacks[currentEnemyIdx].play();
+        //TODO: timer 1s
         heroHp = Math.max(0,heroHp-damage);
     }
 
