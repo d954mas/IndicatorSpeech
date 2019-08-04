@@ -5,6 +5,7 @@ import com.d954mas.engine.EngineApplication;
 import com.d954mas.engine.services.Service;
 import com.d954mas.engine.services.Services;
 import com.d954mas.engine.services.iface.ScreenService;
+import com.d954mas.game.indicator2019.speech.model.MagicWord;
 import com.d954mas.game.indicator2019.speech.model.MagicWords;
 import com.d954mas.game.indicator2019.speech.model.World;
 import com.d954mas.game.indicator2019.speech.screnes.game.GameScreen;
@@ -25,10 +26,12 @@ public class Game extends EngineApplication {
     public void create() {
         super.create();
         ResGame.res.init(manager,true);
-        Services.get(ScreenService.class)
-                .showNextScreen(new GameScreen());
         World.init();
         MagicWords.init();
+        World.get().prepareBattle();
+        Services.get(ScreenService.class)
+                .showNextScreen(new GameScreen());
+
     }
 
     @Override

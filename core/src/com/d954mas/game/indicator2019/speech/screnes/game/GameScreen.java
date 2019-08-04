@@ -12,14 +12,20 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.d954mas.engine.services.Services;
 import com.d954mas.game.indicator2019.speech.Game;
+import com.d954mas.game.indicator2019.speech.model.MagicWord;
+import com.d954mas.game.indicator2019.speech.model.MagicWords;
+import com.d954mas.game.indicator2019.speech.model.World;
 import com.d954mas.game.indicator2019.speech.services.iface.SpeechService;
 import com.d954mas.utils.Constants;
 import com.generated.ResDebug;
+
+import java.util.List;
 
 public class GameScreen implements Screen {
     private Stage stage;
     private Button buttonStartRecognotion;
     private GameSceneBg gameSceneBg;
+    private GameUI gameUI;
     private GameSceneEnemy gameSceneEnemy;
     private SpriteBatch batch;
     private Camera camera;
@@ -41,10 +47,35 @@ public class GameScreen implements Screen {
         ((Game)Gdx.app.getApplicationListener()).getMainInput().addProcessor(stage);
         gameSceneBg = new GameSceneBg();
         gameSceneEnemy = new GameSceneEnemy();
+        gameUI = new GameUI(stage);
         batch = new SpriteBatch();
         camera = new OrthographicCamera(1920,1080);
         camera.position.x = Constants.GAME_WIDTH/2;
         camera.position.y = Constants.GAME_HEIGHT/2;
+
+        Services.get(SpeechService.class).addSpeechListener(new SpeechService.SpeechListener() {
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onEnd() {
+            }
+
+            @Override
+            public void onPartialResult(String result) {
+            }
+
+            @Override
+            public void onResult(String result) {
+                Gdx.app.postRunnable(() -> {
+                    List<MagicWord> words = MagicWords.recognize(result);
+                    if (World.get().playWords(words)) {
+                        gameUI.updateWords();
+                    }
+                });
+            }
+        });
     }
 
     @Override

@@ -2,13 +2,16 @@ package com.d954mas.game.indicator2019.speech.services.impl;
 
 import com.d954mas.game.indicator2019.speech.services.iface.SpeechService;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SpeechServiceDefault implements SpeechService {
+    private Set<SpeechListener> speechListeners;
 
     @Override
     public void init() {
-
+        speechListeners = new LinkedHashSet<>();
     }
 
     @Override
@@ -99,12 +102,24 @@ public class SpeechServiceDefault implements SpeechService {
 
     @Override
     public void addSpeechListener(SpeechListener speechListener) {
-
+        speechListeners.add(speechListener);
     }
 
     @Override
     public void removeSpeechListener(SpeechListener speechListener) {
+        speechListeners.remove(speechListener);
+    }
 
+    public void speechEventPart(String string){
+        for (SpeechListener listener:speechListeners){
+            listener.onPartialResult(string);
+        }
+    }
+
+    public void speechEventFinal(String string){
+        for (SpeechListener listener:speechListeners){
+            listener.onResult(string);
+        }
     }
 
 

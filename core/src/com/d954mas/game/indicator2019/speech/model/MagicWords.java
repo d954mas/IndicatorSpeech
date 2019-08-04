@@ -33,6 +33,7 @@ public class MagicWords {
         lie = new MagicWord(Cs.of("обманный"));
         words = Cs.of(attack,defence,strength,
                 fire,storm,love,ice,random,lie);
+        World.get().setStartWords();
     }
 
     public static void dispose(){
@@ -41,7 +42,7 @@ public class MagicWords {
 
     @Nullable
     private static MagicWord recognizeSingle(String string){
-        for(MagicWord magicWord:words){
+        for(MagicWord magicWord:World.get().handsWords){
             if (magicWord.match(string)){
                 return magicWord;
             }

@@ -54,6 +54,7 @@ public class SpeechServiceAndroid implements com.d954mas.game.indicator2019.spee
     private Locale LOCALE =  new Locale("ru","RU");
     private Activity context;
     private Aimybox aimybox;
+    private DroidSpeech droidSpeech;
 
     //region subscriptions
     private  ReceiveChannel<AimyboxException> subscriptionExceptions;
@@ -75,17 +76,21 @@ public class SpeechServiceAndroid implements com.d954mas.game.indicator2019.spee
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                DroidSpeech droidSpeech =  new DroidSpeech(context, null);
-                droidSpeech.setPreferredLanguage(LOCALE.getLanguage());
-                droidSpeech.setOnDroidSpeechListener(SpeechServiceAndroid.this);
+                droidSpeech =  new DroidSpeech(context, null);
                 GooglePlatformSpeechToText speechToText =  new GooglePlatformSpeechToText(context, LOCALE, false){
                     @NotNull
                     @Override
                     public ReceiveChannel<Result> startRecognition() {
-                        context.runOnUiThread(() -> droidSpeech.startDroidSpeechRecognition());
-
+                        context.runOnUiThread(() -> {
+                                droidSpeech.setPreferredLanguage(LOCALE.getLanguage());
+                                droidSpeech.setOnDroidSpeechListener(SpeechServiceAndroid.this);
+                                droidSpeech.startDroidSpeechRecognition();
+                            }
+                        );
                         return super.startRecognition();
                     }
+
+
 
                     @Override
                     public void stopRecognition() {
@@ -96,7 +101,7 @@ public class SpeechServiceAndroid implements com.d954mas.game.indicator2019.spee
                     @Override
                     public void cancelRecognition() {
                         super.cancelRecognition();
-                     //   droidSpeech.closeDroidSpeechOperations();
+                       // droidSpeech.closeDroidSpeechOperations();
                     }
 
                     @Override
@@ -308,13 +313,17 @@ public class SpeechServiceAndroid implements com.d954mas.game.indicator2019.spee
 
     //region recognition
     @Override
-    public void recognitionStop() { aimybox.stopRecognition(); }
+    public void recognitionStop() {
+        aimybox.stopRecognition();
+    }
 
     @Override
     public void recognitionCancel() { aimybox.cancelRecognition(); }
 
     @Override
-    public void recognitionStart() { aimybox.startRecognition(); }
+    public void recognitionStart() {
+        aimybox.startRecognition();
+    }
 
     @Override
     public void recognitionToggle() { aimybox.toggleRecognition(); }
