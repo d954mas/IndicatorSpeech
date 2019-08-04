@@ -3,6 +3,7 @@ package com.d954mas.game.indicator2019.speech.screnes.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -24,7 +26,9 @@ import com.d954mas.game.indicator2019.speech.model.MagicWord;
 import com.d954mas.game.indicator2019.speech.model.World;
 import com.d954mas.game.indicator2019.speech.services.iface.SpeechService;
 import com.d954mas.game.indicator2019.speech.services.impl.SpeechServiceDefault;
+import com.d954mas.utils.Constants;
 import com.generated.ResDebug;
+import com.generated.ResUi;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +42,12 @@ public class GameUI {
     private Table wordsTable;
     private List<MagicWord> debugWords;
     private List<Label> labels;
+
+    private Label enemyHp;
+    private Label enemyDefence;
+    private Label heroHp;
+    private Label heroDefence;
+
     public GameUI(Stage stage){
         debugWords = new ArrayList<>();
         labels = new ArrayList<>();
@@ -45,7 +55,6 @@ public class GameUI {
         wordsTable = new Table();
         root.addActor(wordsTable);
         stage.addActor(root);
-        updateWords();
         stage.addListener(new InputListener(){
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
@@ -56,6 +65,63 @@ public class GameUI {
                 return false;
             }
         });
+
+
+
+        Actor listWordBg = new Image(ResUi.res.atlas_atlas.plashka_spisok);
+        ResUi.res.atlas_atlas.plashka_spisok.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+
+        Group bgEnemyGroup = new Group();
+        Actor bgEnemy = new Image(ResUi.res.atlas_atlas.mosnster_hp_def);
+        bgEnemyGroup.setPosition(Constants.GAME_WIDTH/2-bgEnemy.getWidth()/2,40);
+        ResUi.res.atlas_atlas.mosnster_hp_def.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        enemyHp = new Label("HP:", ResDebug.res.uiskin_json,"big");
+        enemyDefence = new Label("Def:", ResDebug.res.uiskin_json,"big");
+        Table enemyData = new Table();
+        enemyData.setSize(bgEnemy.getWidth(),bgEnemy.getHeight());
+        enemyData.add(enemyHp).expandX();
+        enemyData.add(enemyDefence).expandX();
+        enemyData.setPosition(0,80);
+
+        bgEnemyGroup.addActor(bgEnemy);
+        bgEnemyGroup.addActor(enemyData);
+
+
+        Group bgHeroHpGroup = new Group();
+        Actor bgHeroHp = new Image(ResUi.res.atlas_atlas.plashka_hp_def_player);
+        bgHeroHpGroup.setPosition(Constants.GAME_WIDTH-bgHeroHp.getWidth()-40,100);
+        ResUi.res.atlas_atlas.plashka_hp_def_player.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        heroHp = new Label("HP:", ResDebug.res.uiskin_json,"big");
+        heroDefence = new Label("Def:", ResDebug.res.uiskin_json,"big");
+
+        Table heroData = new Table();
+        heroData.setSize(bgHeroHp.getWidth(),bgHeroHp.getHeight());
+        heroData.add(heroHp).expandX();
+        heroData.add(heroDefence).expandX();
+        heroData.setPosition(0,80);
+        bgHeroHpGroup.addActor(bgHeroHp);
+        bgHeroHpGroup.addActor(heroData);
+
+        Group bgHeroManaGroup = new Group();
+        Actor bgHeroMana = new Image(ResUi.res.atlas_atlas.plashka_mp);
+        bgHeroManaGroup.setPosition(Constants.GAME_WIDTH-bgHeroMana.getWidth()-40,260);
+        ResUi.res.atlas_atlas.plashka_mp.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        Label mpText = new Label("MP", ResDebug.res.uiskin_json);
+        mpText.setPosition(bgHeroMana.getWidth()/2-mpText.getWidth()/2,80);
+        bgHeroManaGroup.addActor(bgHeroMana);
+        bgHeroManaGroup.addActor(mpText);
+
+        root.addActor(bgEnemyGroup);
+        root.addActor(bgHeroHpGroup);
+        root.addActor(bgHeroManaGroup);
+        root.addActor(listWordBg);
+
+        Actor debugScene = new Image(ResUi.res.atlas_atlas.ui);
+        debugScene.getColor().a = 0.44f;
+       // root.addActor(debugScene);
+
+        updateWords();
     }
 
     private void playWordsDebug(){
@@ -114,7 +180,7 @@ public class GameUI {
                 MagicWord word = (MagicWord) lbl.getUserObject();
                 lbl.clearActions();
                 if(word == magicWord){
-                    lbl.addAction(Actions.delay(delay,Actions.alpha(0,0.4f)));
+                    lbl.addAction(Actions.delay(delay,Actions.color(new Color(1,1,1,1),0.4f)));
                     delay = delay + 0.15f;
                     i.remove();
                     break;
@@ -131,19 +197,25 @@ public class GameUI {
                    float delay = 0;
                    for(int i = currentSize;i<newSize;i++){
                        Label lbl = labels.get(i);
-                       lbl.getColor().a = 0;
-                       lbl.addAction(Actions.sequence(Actions.delay(delay),Actions.alpha(1,0.3f)));
+                       lbl.addAction(Actions.sequence(Actions.delay(delay),Actions.color(new Color(1,1,1,1))));
                        delay = delay + 0.1f;
                    }
                 }
             }, delay);
     }
 
+    public void update(float dt){
+        enemyDefence.setText("Def:" + World.get().currentEnemy.currentDefence);
+        enemyHp.setText("Hp:" + World.get().currentEnemy.hp);
+        heroHp.setText("Hp:" + World.get().heroHp);
+        heroDefence.setText("Def:" + World.get().heroDefence);
+    }
 
     public void updateWords(){
         wordsTable.reset();
         wordsTable.remove();
         wordsTable = new Table();
+        wordsTable.setPosition(40,0);
         root.addActor(wordsTable);
         labels.clear();
         for(MagicWord word:World.get().handsWords){
@@ -157,9 +229,9 @@ public class GameUI {
             });
             lbl.setUserObject(word);
             labels.add(lbl);
-            wordsTable.add(lbl).space(40).row();
+            wordsTable.add(lbl).space(42).row();
         }
-        wordsTable.setPosition(150,1000-wordsTable.getPrefHeight());
+        wordsTable.setPosition(260,1080-wordsTable.getPrefHeight());
     }
 
     private void playWordDebug(MagicWord word){

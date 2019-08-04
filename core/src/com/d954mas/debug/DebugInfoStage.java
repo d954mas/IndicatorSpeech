@@ -45,20 +45,18 @@ public class DebugInfoStage implements Disposable {
         lblDrawCalls.setPosition(1050,1080-60);
 
         lblSpeechState= new Label("State:", ResDebug.res.uiskin_json);
-        lblSpeechState.setPosition(0,1080-60-60);
+        lblSpeechState.setPosition(300,1080-60-60);
         lblSpeechResults= new Label("Result:", ResDebug.res.uiskin_json);
-        lblSpeechResults.setPosition(420,1080-60-60);
+        lblSpeechResults.setPosition(300+420,1080-60-60);
 
         lblSpeechNormalResults= new Label("Normal:", ResDebug.res.uiskin_json);
-        lblSpeechNormalResults.setPosition(420,1080-60-60-60);
+        lblSpeechNormalResults.setPosition(300+420,1080-60-60-60);
 
         lblSpeechMagicResults= new Label("Magic", ResDebug.res.uiskin_json);
-        lblSpeechMagicResults.setPosition(420,1080-60-60-60-60);
+        lblSpeechMagicResults.setPosition(300+420,1080-60-60-60-60);
 
-        lblHp= new Label("HP", ResDebug.res.uiskin_json);
-        lblHp.setPosition(420,1080-60-60-60-60-60);
         lblEffects= new Label("Effects", ResDebug.res.uiskin_json);
-        lblEffects.setPosition(420,1080-60-60-60-60-60-60);
+        lblEffects.setPosition(500,1080-60-60-60-60-60-60);
 
         stage.addActor(lblFrames);
         stage.addActor(lblMemoryJava);
@@ -68,7 +66,6 @@ public class DebugInfoStage implements Disposable {
         stage.addActor(lblSpeechResults);
         stage.addActor(lblSpeechNormalResults);
         stage.addActor(lblSpeechMagicResults);
-        stage.addActor(lblHp);
         stage.addActor(lblEffects);
         profiler = new GLProfiler(Gdx.graphics);
         profiler.enable();
@@ -120,7 +117,6 @@ public class DebugInfoStage implements Disposable {
         lblMemoryNative.setText(String.format("mem(native):%s", humanReadableByteCount(Gdx.app.getNativeHeap())));
         lblDrawCalls.setText(String.format("DrawCalls:%d", profiler.getDrawCalls()));
         lblSpeechState.setText(String.format("Speech:%s", Services.get(SpeechService.class).getState()));
-        lblHp.setText("HP:" + World.get().currentEnemy.hp + "/" + World.get().currentEnemy.maxHp);
         String stringEffects = "";
         for(Effect effect:World.get().effects){
             stringEffects += effect.toString() + " ";

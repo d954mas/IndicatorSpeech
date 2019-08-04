@@ -12,6 +12,7 @@ public class Enemy {
     public boolean attack;
     public int attackValue;
     public int defenceValue;
+    public int currentDefence;
     public Enemy(Animation<TextureRegion> animation,int hp, int minAtk, int maxAtk,
                  int minShield, int maxShield){
         this.animation = animation;

@@ -1,14 +1,56 @@
 
 atlas.png
-size: 16,16
+size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+activnoe_slovo
+  rotate: false
+  xy: 478, 195
+  size: 358, 91
+  orig: 358, 91
+  offset: 0, 0
+  index: -1
 empty
   rotate: false
-  xy: 2, 5
+  xy: 1924, 1367
   size: 1, 1
   orig: 1, 1
+  offset: 0, 0
+  index: -1
+mosnster_def
+  rotate: false
+  xy: 838, 253
+  size: 159, 33
+  orig: 159, 33
+  offset: 0, 0
+  index: -1
+mosnster_hp_def
+  rotate: false
+  xy: 2, 5
+  size: 355, 59
+  orig: 355, 59
+  offset: 0, 0
+  index: -1
+plashka_hp_def_player
+  rotate: false
+  xy: 2, 177
+  size: 474, 109
+  orig: 474, 109
+  offset: 0, 0
+  index: -1
+plashka_mp
+  rotate: false
+  xy: 2, 66
+  size: 474, 109
+  orig: 474, 109
+  offset: 0, 0
+  index: -1
+ui
+  rotate: false
+  xy: 2, 288
+  size: 1920, 1080
+  orig: 1920, 1080
   offset: 0, 0
   index: -1
 white
@@ -16,5 +58,25 @@ white
   xy: 2, 2
   size: 1, 1
   orig: 1, 1
+  offset: 0, 0
+  index: -1
+word_null
+  rotate: false
+  xy: 478, 122
+  size: 338, 71
+  orig: 338, 71
+  offset: 0, 0
+  index: -1
+
+atlas2.png
+size: 1024,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+plashka_spisok
+  rotate: false
+  xy: 2, 2
+  size: 533, 1053
+  orig: 533, 1053
   offset: 0, 0
   index: -1

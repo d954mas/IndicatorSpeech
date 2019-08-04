@@ -63,8 +63,11 @@ public class World {
     }
 
     void setStartWords(){
-        allWords.addAll(Cs.of(MagicWords.attack,MagicWords.attack,MagicWords.defence,
-                MagicWords.defence,MagicWords.fire,MagicWords.ice));
+        allWords.addAll(Cs.of(
+                MagicWords.attack,
+                MagicWords.defence,
+                MagicWords.fire,
+                MagicWords.ice));
     }
 
     public void prepareBattle(){
@@ -74,7 +77,6 @@ public class World {
         handsWords.clear();
         removedWords.clear();
         handsWords.addAll(allWords);
-        Collections.shuffle(handsWords);
         state = States.PLAYER_TURN;
         currentEnemyIdx = 0;
         currentEnemy = Enemies.enemyList.get(currentEnemyIdx);
@@ -161,10 +163,10 @@ public class World {
     public boolean playWords(List<MagicWord> words){
         if(words.size()>1 && state == States.PLAYER_TURN) {
             for (MagicWord word : words) {
-                if (!handsWords.remove(word)) {
-                    Gdx.app.log(TAG, "can't play word not from hand");
-                }
-                removedWords.add(word);
+               // if (!handsWords.remove(word)) {
+                 //   Gdx.app.log(TAG, "can't play word not from hand");
+              //  }
+              //  removedWords.add(word);
             }
             state = States.ENEMY_TURN;
             check(100);
@@ -226,8 +228,8 @@ public class World {
     //Проверка на то что в руке есть карты
     public void check(int number){
         if (handsWords.size()<number){
-            handsWords.addAll(removedWords);
-            removedWords.clear();
+          //  handsWords.addAll(removedWords);
+          //  removedWords.clear();
         }
 
     }
