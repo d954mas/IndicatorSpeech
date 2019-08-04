@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.d954mas.engine.services.Services;
 import com.d954mas.game.indicator2019.speech.model.MagicWord;
 import com.d954mas.game.indicator2019.speech.model.MagicWords;
+import com.d954mas.game.indicator2019.speech.model.World;
 import com.d954mas.game.indicator2019.speech.services.iface.SpeechService;
 import com.d954mas.utils.Constants;
 import com.generated.ResDebug;
@@ -28,6 +29,7 @@ public class DebugInfoStage implements Disposable {
     private Label lblSpeechResults;
     private Label lblSpeechNormalResults;
     private Label lblSpeechMagicResults;
+    private Label lblHp;
     private GLProfiler profiler;
     public DebugInfoStage(){
         stage = new Stage(new FitViewport(Constants.GAME_WIDTH,Constants.GAME_HEIGHT));
@@ -51,6 +53,9 @@ public class DebugInfoStage implements Disposable {
         lblSpeechMagicResults= new Label("Magic", ResDebug.res.uiskin_json);
         lblSpeechMagicResults.setPosition(420,1080-60-60-60-60);
 
+        lblHp= new Label("HP", ResDebug.res.uiskin_json);
+        lblHp.setPosition(420,1080-60-60-60-60-60);
+
         stage.addActor(lblFrames);
         stage.addActor(lblMemoryJava);
         stage.addActor(lblMemoryNative);
@@ -59,6 +64,7 @@ public class DebugInfoStage implements Disposable {
         stage.addActor(lblSpeechResults);
         stage.addActor(lblSpeechNormalResults);
         stage.addActor(lblSpeechMagicResults);
+        stage.addActor(lblHp);
         profiler = new GLProfiler(Gdx.graphics);
         profiler.enable();
 
@@ -109,7 +115,7 @@ public class DebugInfoStage implements Disposable {
         lblMemoryNative.setText(String.format("mem(native):%s", humanReadableByteCount(Gdx.app.getNativeHeap())));
         lblDrawCalls.setText(String.format("DrawCalls:%d", profiler.getDrawCalls()));
         lblSpeechState.setText(String.format("Speech:%s", Services.get(SpeechService.class).getState()));
-
+        lblHp.setText("HP:" + World.get().currentEnemy.hp + "/" + World.get().currentEnemy.maxHp);
     }
 
     public void draw() {

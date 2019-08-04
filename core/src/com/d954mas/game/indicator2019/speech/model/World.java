@@ -80,6 +80,18 @@ public class World {
         currentEnemy = Enemies.enemyList.get(currentEnemyIdx);
     }
 
+    public boolean isAttack(List<MagicWord> words){
+        return words.contains(MagicWords.attack);
+    }
+
+    private void attackEnemy(int damage){
+        currentEnemy.hp = Math.max(currentEnemy.hp - damage,0);
+
+        if(currentEnemy.hp<=0){
+            nextEnemyDebug();
+        }
+    }
+
     public boolean playWords(List<MagicWord> words){
         if(words.size()>1 && state == States.PLAYER_TURN) {
             for (MagicWord word : words) {
@@ -91,6 +103,15 @@ public class World {
             state = States.ENEMY_TURN;
             check(100);
             Services.get(SpeechService.class).recognitionStop();
+
+            if(isAttack(words)){
+                //add damage
+                attackEnemy(5);
+            }else{
+
+            }
+
+
             Timer.instance().scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
