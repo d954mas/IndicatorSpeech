@@ -67,7 +67,10 @@ public class World {
                 MagicWords.attack,
                 MagicWords.defence,
                 MagicWords.fire,
-                MagicWords.ice));
+                MagicWords.ice,
+                MagicWords.lie,
+                MagicWords.love,
+                MagicWords.storm));
     }
 
     public void prepareBattle(){
@@ -119,11 +122,15 @@ public class World {
             //reduce attack
             damage = Math.max(0,damage-4);
         }
-        heroHp = Math.max(0,heroHp=damage);
+        heroHp = Math.max(0,heroHp-damage);
     }
 
     private void defenceHero(int defence){
         heroDefence = heroDefence + defence;
+    }
+
+    private void defenceEnemy(int defence){
+
     }
 
     private void addEffect(Effect effect){
@@ -204,12 +211,14 @@ public class World {
                 @Override
                 public void run() {
                     removeDebuffEffects();
-                    boolean enemyAttack = true;
+                    boolean enemyAttack = World.get().currentEnemy.attack;
                     if(effects.contains(Effects.IceAttackEffect) || effects.contains(Effects.IceDefenceEffect)){
 
                     }else {
                         if (enemyAttack) {
-                            attackHero(5);
+                            attackHero(World.get().currentEnemy.attackValue);
+                        }else{
+                            defenceEnemy(World.get().currentEnemy.defenceValue);
                         }
 
                         if (effects.contains(Effects.FireAttackEffect)) {

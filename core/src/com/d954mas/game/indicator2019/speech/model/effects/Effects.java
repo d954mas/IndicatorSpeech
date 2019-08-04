@@ -10,8 +10,8 @@ public class Effects {
     public static DebuffEffect LoveAttackEffect = new DebuffEffect(1,"LoveAttack");
     public static BuffEffect LoveDefenceEffect = new BuffEffect(100500,"LoveDefence");
 
-    public static DebuffEffect IceAttackEffect = new DebuffEffect(1,"IceAttack");
-    public static DebuffEffect IceDefenceEffect = new DebuffEffect(1,"IceDefence");
+    public static BuffEffect IceAttackEffect = new BuffEffect(1,"IceAttack");
+    public static BuffEffect IceDefenceEffect = new BuffEffect(1,"IceDefence");
 
     public static DebuffEffect LieAttackEffect = new DebuffEffect(1,"LieAttack");
     public static DebuffEffect LieDefenceEffect = new DebuffEffect(1,"LieDefence");
