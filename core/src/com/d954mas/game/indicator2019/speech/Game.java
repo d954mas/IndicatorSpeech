@@ -28,7 +28,6 @@ public class Game extends EngineApplication {
         ResGame.res.init(manager,true);
         World.init();
         MagicWords.init();
-        World.get().prepareBattle();
         Services.get(ScreenService.class)
                 .showNextScreen(new GameScreen());
 

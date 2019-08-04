@@ -15,6 +15,8 @@ import com.d954mas.game.indicator2019.speech.Game;
 import com.d954mas.game.indicator2019.speech.model.MagicWord;
 import com.d954mas.game.indicator2019.speech.model.MagicWords;
 import com.d954mas.game.indicator2019.speech.model.World;
+import com.d954mas.game.indicator2019.speech.model.enemies.Enemies;
+import com.d954mas.game.indicator2019.speech.model.enemies.Enemy;
 import com.d954mas.game.indicator2019.speech.services.iface.SpeechService;
 import com.d954mas.utils.Constants;
 import com.generated.ResDebug;
@@ -23,7 +25,8 @@ import java.util.List;
 
 public class GameScreen implements Screen {
     private Stage stage;
-    private Button buttonStartRecognotion;
+    private Button buttonNextEnemy;
+    private Button buttonPrevEnemy;
     private GameSceneBg gameSceneBg;
     private GameUI gameUI;
     private GameSceneEnemy gameSceneEnemy;
@@ -32,18 +35,34 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        Enemies.init();
+        World.get().prepareBattle();
         stage = new Stage(new FitViewport(Constants.GAME_WIDTH,Constants.GAME_HEIGHT));
-        buttonStartRecognotion = new Button(ResDebug.res.uiskin_json);
-        buttonStartRecognotion.addListener(new ClickListener(){
+
+        buttonNextEnemy = new Button(ResDebug.res.uiskin_json);
+        buttonNextEnemy.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("GameScreen","start recognition");
-                Services.get(SpeechService.class).recognitionStart();
+                World.get().nextEnemyDebug();
             }
         });
-        buttonStartRecognotion.setPosition(Constants.GAME_WIDTH-80,Constants.GAME_HEIGHT-100);
-        buttonStartRecognotion.setSize(50,50);
-        stage.addActor(buttonStartRecognotion);
+        buttonNextEnemy.setPosition(Constants.GAME_WIDTH-80,Constants.GAME_HEIGHT-100);
+        buttonNextEnemy.setSize(50,50);
+
+        buttonPrevEnemy = new Button(ResDebug.res.uiskin_json);
+        buttonPrevEnemy.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                World.get().prevEnemyDebug();
+
+            }
+        });
+        buttonPrevEnemy.setPosition(Constants.GAME_WIDTH-160,Constants.GAME_HEIGHT-100);
+        buttonPrevEnemy.setSize(50,50);
+
+
+        stage.addActor(buttonNextEnemy);
+        stage.addActor(buttonPrevEnemy);
         ((Game)Gdx.app.getApplicationListener()).getMainInput().addProcessor(stage);
         gameSceneBg = new GameSceneBg();
         gameSceneEnemy = new GameSceneEnemy();

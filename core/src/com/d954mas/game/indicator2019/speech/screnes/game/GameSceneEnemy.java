@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.d954mas.engine.utils.ui.UIUtils;
+import com.d954mas.game.indicator2019.speech.model.World;
 import com.d954mas.utils.Constants;
 import com.generated.ResGame;
 
@@ -25,12 +26,16 @@ public class GameSceneEnemy {
     }
 
     public void setAnimation(Animation<TextureRegion> newAnimation){
-        animation = newAnimation;
-        time = 0;
+        if(animation != newAnimation){
+            animation = newAnimation;
+            time = 0;
+        }
+
     }
 
     public void update(float dt){
         time = time + dt;
+        setAnimation(World.get().currentEnemy.animation);
         TextureRegion region = animation.getKeyFrame(time,true);
         sprite.setRegion(region);
         sprite.setSize(region.getRegionWidth(),region.getRegionHeight());

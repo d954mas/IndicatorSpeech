@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
 import com.d954mas.engine.services.Services;
 import com.d954mas.engine.utils.Cs;
+import com.d954mas.game.indicator2019.speech.model.enemies.Enemies;
+import com.d954mas.game.indicator2019.speech.model.enemies.Enemy;
 import com.d954mas.game.indicator2019.speech.services.iface.SpeechService;
 
 import org.apache.lucene.morphology.LuceneMorphology;
@@ -32,6 +34,8 @@ public class World {
     public final List<MagicWord> allWords;
     public final List<MagicWord> handsWords;
     public final List<MagicWord> removedWords;
+    public Enemy currentEnemy;
+    public int currentEnemyIdx;
 
     enum  States {PLAYER_TURN,ENEMY_TURN};
 
@@ -52,7 +56,6 @@ public class World {
     void setStartWords(){
         allWords.addAll(Cs.of(MagicWords.attack,MagicWords.attack,MagicWords.defence,
                 MagicWords.defence,MagicWords.fire,MagicWords.ice));
-        prepareBattle();
     }
 
     public void prepareBattle(){
@@ -61,6 +64,20 @@ public class World {
         handsWords.addAll(allWords);
         Collections.shuffle(handsWords);
         state = States.PLAYER_TURN;
+        currentEnemyIdx = 0;
+        currentEnemy = Enemies.enemyList.get(currentEnemyIdx);
+    }
+
+    public void nextEnemyDebug(){
+        currentEnemyIdx = currentEnemyIdx + 1;
+        currentEnemyIdx = Math.max(0, Math.min(Enemies.enemyList.size()-1, currentEnemyIdx));
+        currentEnemy = Enemies.enemyList.get(currentEnemyIdx);
+    }
+
+    public void prevEnemyDebug(){
+        currentEnemyIdx = currentEnemyIdx -1;
+        currentEnemyIdx = Math.max(0, Math.min(Enemies.enemyList.size(), currentEnemyIdx));
+        currentEnemy = Enemies.enemyList.get(currentEnemyIdx);
     }
 
     public boolean playWords(List<MagicWord> words){
