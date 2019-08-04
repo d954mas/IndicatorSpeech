@@ -1,6 +1,7 @@
 package com.d954mas.game.indicator2019.speech.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -17,7 +18,9 @@ import com.d954mas.game.indicator2019.speech.model.enemies.Enemies;
 import com.d954mas.game.indicator2019.speech.model.enemies.Enemy;
 import com.d954mas.game.indicator2019.speech.services.iface.SpeechService;
 import com.d954mas.game.indicator2019.speech.sounds.Sounds;
+import com.d954mas.utils.Constants;
 import com.generated.ResGame;
+import com.generated.ResUi;
 
 import org.apache.lucene.morphology.LuceneMorphology;
 import org.apache.lucene.morphology.russian.RussianLuceneMorphology;
@@ -149,6 +152,11 @@ public class World {
 
     private void defenceHero(int defence){
         heroDefence = heroDefence + defence;
+        Actor actor = new Image(ResGame.res.effect_atlas.vinetka_player_def);
+        actor.getColor().a = 1;
+        actor.addAction(Actions.sequence(Actions.alpha(1),Actions.delay(0.5f),Actions.alpha(0),
+                Actions.removeActor()));
+        stage.addActor(actor);
     }
 
     private void defenceEnemy(int defence){
@@ -189,9 +197,33 @@ public class World {
         }
     }
 
+
     public boolean playWords(List<MagicWord> words){
         if(words.size()>1 && state == States.PLAYER_TURN) {
+
+            float dt = 0;
             for (MagicWord word : words) {
+                dt = dt + 0.3f;
+                TextureRegion region = ResUi.res.atlas_atlas.empty;
+                if(word==MagicWords.attack){
+                    region = ResGame.res.effect_atlas.attack_effect;
+                }else if(word == MagicWords.fire){
+                    region = ResGame.res.effect_atlas.fire_effect;
+                }else if(word == MagicWords.storm){
+                    region = ResGame.res.effect_atlas.light_effect;
+                }else if(word == MagicWords.ice){
+                    region = ResGame.res.effect_atlas.ice_effect;
+                }else if(word == MagicWords.lie){
+                    region = ResGame.res.effect_atlas.obman_effect;
+                }else if(word == MagicWords.love){
+                    region = ResGame.res.effect_atlas.love_effect;
+                }
+                Actor actor = new Image(region);
+                actor.setPosition(Constants.GAME_WIDTH/2-actor.getWidth()/2,Constants.GAME_HEIGHT/2-actor.getHeight()/2);
+                actor.getColor().a = 0;
+                actor.addAction(Actions.sequence(Actions.delay(dt),Actions.alpha(1,0.15f),Actions.delay(0.2f),Actions.alpha(0.1f),
+                        Actions.removeActor()));
+                stage.addActor(actor);
                // if (!handsWords.remove(word)) {
                  //   Gdx.app.log(TAG, "can't play word not from hand");
               //  }

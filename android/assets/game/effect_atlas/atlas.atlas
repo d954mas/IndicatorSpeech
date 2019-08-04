@@ -4,16 +4,71 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-attack_effect
+fire_effect
+  rotate: false
+  xy: 1613, 95
+  size: 419, 600
+  orig: 419, 600
+  offset: 0, 0
+  index: -1
+ice_effect
+  rotate: false
+  xy: 1133, 72
+  size: 478, 623
+  orig: 478, 623
+  offset: 0, 0
+  index: -1
+light_effect
+  rotate: false
+  xy: 546, 66
+  size: 585, 629
+  orig: 585, 629
+  offset: 0, 0
+  index: -1
+silnaya_attack_effect
   rotate: false
   xy: 2, 2
+  size: 542, 693
+  orig: 542, 693
+  offset: 0, 0
+  index: -1
+vinetka_player_def
+  rotate: false
+  xy: 2, 697
+  size: 1920, 1080
+  orig: 1920, 1080
+  offset: 0, 0
+  index: -1
+
+atlas2.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+attack_effect
+  rotate: false
+  xy: 568, 62
   size: 513, 462
   orig: 513, 462
   offset: 0, 0
   index: -1
+love_effect
+  rotate: false
+  xy: 2, 2
+  size: 564, 522
+  orig: 564, 522
+  offset: 0, 0
+  index: -1
+obman_effect
+  rotate: false
+  xy: 1083, 77
+  size: 447, 447
+  orig: 447, 447
+  offset: 0, 0
+  index: -1
 vinetka_player_uron
   rotate: false
-  xy: 2, 466
+  xy: 2, 526
   size: 1920, 1080
   orig: 1920, 1080
   offset: 0, 0

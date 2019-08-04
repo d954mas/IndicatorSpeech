@@ -34,6 +34,7 @@ public class ResSounds {
     public FileHandle spown_slime_wav;
     public FileHandle strong_wav;
     public FileHandle thunder_wav;
+  //  public FileHandle water-dripping-in-cave_wav;
 
     public void init(AssetManager manager){
         init(manager,false);
@@ -68,7 +69,7 @@ public class ResSounds {
         spown_slime_wav = Gdx.files.internal("sounds/spown_slime.wav");
         strong_wav = Gdx.files.internal("sounds/strong.wav");
         thunder_wav = Gdx.files.internal("sounds/thunder.wav");
-       // water-dripping-in-cave_wav = Gdx.files.internal("sounds/water-dripping-in-cave.wav");
+     //   water-dripping-in-cave_wav = Gdx.files.internal("sounds/water-dripping-in-cave.wav");
         if(finishLoading){
             manager.finishLoading();
             onLoadDone(manager);
@@ -110,7 +111,7 @@ public class ResSounds {
             spown_slime_wav = null;
             strong_wav = null;
             thunder_wav = null;
-          //  water-dripping-in-cave_wav = null;
+        //    water-dripping-in-cave_wav = null;
         }
         if(isLoad){
         }

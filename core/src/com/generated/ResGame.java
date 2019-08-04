@@ -113,7 +113,14 @@ public class ResGame {
         private boolean isLoad;
         private boolean isInit;
         public UnloadableTextureAtlas atlas;
+        public AtlasRegion fire_effect;
+        public AtlasRegion ice_effect;
+        public AtlasRegion light_effect;
+        public AtlasRegion silnaya_attack_effect;
+        public AtlasRegion vinetka_player_def;
         public AtlasRegion attack_effect;
+        public AtlasRegion love_effect;
+        public AtlasRegion obman_effect;
         public AtlasRegion vinetka_player_uron;
 
         protected void init(AssetManager manager){
@@ -134,7 +141,14 @@ public class ResGame {
                 atlas=new UnloadableTextureAtlas();
             }
             atlas.load((TextureAtlasData)manager.get("game/effect_atlas/atlas.atlas"));
+            fire_effect = atlas.findRegion("fire_effect");
+            ice_effect = atlas.findRegion("ice_effect");
+            light_effect = atlas.findRegion("light_effect");
+            silnaya_attack_effect = atlas.findRegion("silnaya_attack_effect");
+            vinetka_player_def = atlas.findRegion("vinetka_player_def");
             attack_effect = atlas.findRegion("attack_effect");
+            love_effect = atlas.findRegion("love_effect");
+            obman_effect = atlas.findRegion("obman_effect");
             vinetka_player_uron = atlas.findRegion("vinetka_player_uron");
             isLoad=true;
         }
