@@ -64,6 +64,8 @@ public class GameScreen implements Screen {
 
             @Override
             public void onPartialResult(String result) {
+                List<MagicWord> words = MagicWords.recognize(result);
+                gameUI.changeWordsVisual(words);
             }
 
             @Override
@@ -71,6 +73,9 @@ public class GameScreen implements Screen {
                 Gdx.app.postRunnable(() -> {
                     List<MagicWord> words = MagicWords.recognize(result);
                     if (World.get().playWords(words)) {
+                        gameUI.animateUseAndNewWordsAppear(words);
+                    }else{
+                        //reset
                         gameUI.updateWords();
                     }
                 });
